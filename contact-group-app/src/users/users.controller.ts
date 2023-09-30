@@ -1,15 +1,17 @@
-import { Controller, Body, Post, Get, Put, Delete, Param, Query } from '@nestjs/common';
+import { Controller, Request, Body, Post, Get, Put, Delete, Param, Query, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './user-dto/create-user.dto';
 import { UpdateUserDto } from './user-dto/update-user.dto';
 import { UsersService } from './users.service';
-import { Prisma } from '@prisma/client';
+import { JwtStrategy } from '../auth/jwt.strategy';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
+    @UseGuards(JwtStrategy)
     @Get()
     async list(
+        @Request() req: any,
         @Query() query: any
     ): Promise<any> {
         query['deletedAt'] = {
@@ -23,6 +25,7 @@ export class UsersController {
 
     @Get('/archived')
     async archived(
+        @Request() req: any,
         @Query() query: any
     ): Promise<any> {
         query['deletedAt'] = {
@@ -36,6 +39,7 @@ export class UsersController {
 
     @Post('/signup')
     async createUser(
+        @Request() req: any,
         @Body() createUserDto: CreateUserDto,
     ): Promise<any> {
         const result = await this.usersService.createUser(createUserDto);
@@ -48,6 +52,7 @@ export class UsersController {
 
     @Put(':id/update')
     async updateUser(
+        @Request() req: any,
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<any> {

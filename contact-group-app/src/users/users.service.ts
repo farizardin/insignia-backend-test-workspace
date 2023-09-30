@@ -11,7 +11,13 @@ export class UsersService {
     constructor() { this.usersRepository = new UsersRepository }
 
     async listUser(query: Record<string, any>) {
-        const user = this.usersRepository.findMany(query);
+        const users = this.usersRepository.findMany(query);
+        return users;
+    }
+
+    async getUser(email: string) {
+        const data = { email: email }
+        const user = this.usersRepository.findByEmail(data);
         return user;
     }
 
@@ -19,7 +25,8 @@ export class UsersService {
         const newUserDto = new CreateUserDto;
         newUserDto.name = params.name;
         newUserDto.email = params.email;
-        newUserDto.password = await bcrypt.hash(params.password, 5);
+        const salt = await bcrypt.genSalt();
+        newUserDto.password = await bcrypt.hash(params.password, salt);
         const user = this.usersRepository.create(newUserDto);
 
         return user;

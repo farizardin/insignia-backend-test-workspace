@@ -38,7 +38,7 @@ export class UsersRepository {
         return this.user.findMany({ where: query });
     }
 
-    async findUnique(query: any) {
+    async findByEmail(query: any) {
         return this.user.findUnique({ where: query });
     }
 
