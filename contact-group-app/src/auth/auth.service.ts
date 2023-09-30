@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -14,6 +14,7 @@ export class AuthService {
     async validateUser(email: string, password: string): Promise<any> {
         const user = await this.usersService.getUser(email);
         const passwordValid = await bcrypt.compare(password, user.password)
+        console.log(user, password, passwordValid);
         if (user && passwordValid) {
             return user;
         }

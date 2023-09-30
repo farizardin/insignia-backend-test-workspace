@@ -15,7 +15,7 @@ export class UsersRepository {
         const data = {
             name: params.name,
             email: params.email,
-            password: await bcrypt.hash(params.password, 5),
+            password: params.password,
         }
         const newUser = await this.user.create({
             data: data
@@ -25,9 +25,8 @@ export class UsersRepository {
     }
 
     async update(id: string, params: any): Promise<any> {
-        const userId = parseInt(id);
         const updatedUser = await this.user.update({
-            where: { id: userId },
+            where: { id: id },
             data: params
         });
 
@@ -38,19 +37,18 @@ export class UsersRepository {
         return this.user.findMany({ where: query });
     }
 
-    async findByEmail(query: any) {
+    async findByEmail(query: any): Promise<any> {
         return this.user.findUnique({ where: query });
     }
 
-    async findById(id: number) {
+    async findById(id: string): Promise<any> {
         return this.user.findUnique({ where: { id: id } });
     }
 
     async softDelete(id: string): Promise<any> {
         const currentDate = new Date();
-        const userId = parseInt(id);
         const updatedUser = await this.user.update({
-            where: { id: userId },
+            where: { id: id },
             data: { deletedAt: currentDate }
         });
 
@@ -58,13 +56,12 @@ export class UsersRepository {
     }
 
     async hardDelete(id: string): Promise<any> {
-        const userId = parseInt(id);
-        const user = await this.findById(userId)
+        const user = await this.findById(id)
         if(!user){
             throw new NotFoundException('User not found');
         }
         const updatedUser = await this.user.delete({
-            where: { id: userId },
+            where: { id: id },
         });
 
         return updatedUser;
