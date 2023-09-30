@@ -45,8 +45,13 @@ export class UsersController {
         const result = await this.usersService.createUser(createUserDto);
         return {
             msg: 'User successfully registered',
-            email: result.email,
-            password: result.password
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                role: result.email,
+                createdAt: result.createdAt,
+            }
         };
     }
 

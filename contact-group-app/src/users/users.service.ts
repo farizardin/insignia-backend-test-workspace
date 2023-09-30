@@ -32,7 +32,7 @@ export class UsersService {
         return user;
     }
 
-    async updateUser(id: string, params: UpdateUserDto) {
+    async updateUser(id: string, params: any) {
         const userDtoObject = instanceToPlain(params);
         const user = this.usersRepository.update(id, userDtoObject);
         return user;

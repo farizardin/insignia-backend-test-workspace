@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -42,6 +42,10 @@ export class UsersRepository {
         return this.user.findUnique({ where: query });
     }
 
+    async findById(id: number) {
+        return this.user.findUnique({ where: { id: id } });
+    }
+
     async softDelete(id: string): Promise<any> {
         const currentDate = new Date();
         const userId = parseInt(id);
@@ -55,6 +59,10 @@ export class UsersRepository {
 
     async hardDelete(id: string): Promise<any> {
         const userId = parseInt(id);
+        const user = await this.findById(userId)
+        if(!user){
+            throw new NotFoundException('User not found');
+        }
         const updatedUser = await this.user.delete({
             where: { id: userId },
         });

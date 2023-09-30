@@ -25,7 +25,8 @@ export class AuthService {
         const user = await this.validateUser(loginDto.email, loginDto.password);
         const payload = { sub: user.id, email: user.email };
         return {
-            access_token: this.jwtService.sign(payload, { secret: process.env.SECRET_KEY || 'secrete' }),
+            id: user.id,
+            apiToken: this.jwtService.sign(payload, { secret: process.env.SECRET_KEY || 'secrete' }),
         };
     }
 }
