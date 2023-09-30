@@ -1,0 +1,64 @@
+{
+  "name": "contact-group-app",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "contact-group-app/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/contact-group-app",
+        "main": "contact-group-app/src/main.ts",
+        "tsConfig": "contact-group-app/tsconfig.app.json",
+        "assets": ["contact-group-app/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "contact-group-app/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "contact-group-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "contact-group-app:build:development"
+        },
+        "production": {
+          "buildTarget": "contact-group-app:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["contact-group-app/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "contact-group-app/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
