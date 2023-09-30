@@ -37,7 +37,7 @@ export class UsersService {
     }
 
     async hardDeleteUser(id: string) {
-        const user = this.usersRepository.softDelete(id);
+        const user = this.usersRepository.hardDelete(id);
         return user;
     }
 

@@ -81,7 +81,7 @@ export class UsersController {
     async deleteUser(
         @Param('id') id: string
     ): Promise<any> {
-        const result = await this.usersService.softDeleteUser(id);
+        const result = await this.usersService.hardDeleteUser(id);
         return {
             result: result
         };
