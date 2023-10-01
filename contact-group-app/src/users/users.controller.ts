@@ -17,12 +17,14 @@ export class UsersController {
         query['deletedAt'] = {
             equals: null,
         }
+        this.usersService.setUser = req.user;
         const result = await this.usersService.listUser(query);
         return {
             result: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Get('/archived')
     async archived(
         @Request() req: any,
@@ -31,6 +33,7 @@ export class UsersController {
         query['deletedAt'] = {
             not: null,
         }
+        this.usersService.setUser = req.user;
         const result = await this.usersService.listUser(query);
         return {
             result: result
@@ -39,7 +42,6 @@ export class UsersController {
 
     @Post('/signup')
     async createUser(
-        @Request() req: any,
         @Body() createUserDto: CreateUserDto,
     ): Promise<any> {
         const result = await this.usersService.createUser(createUserDto);
@@ -55,42 +57,53 @@ export class UsersController {
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Put(':id/update')
     async updateUser(
         @Request() req: any,
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<any> {
+        this.usersService.setUser = req.user;
         const result = await this.usersService.updateUser(id, updateUserDto);
         return {
             result: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Delete(':id/archive')
     async archiveUser(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.usersService.setUser = req.user;
         const result = await this.usersService.softDeleteUser(id);
         return {
             result: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Put(':id/restore')
     async restoreUser(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.usersService.setUser = req.user;
         const result = await this.usersService.restoreUser(id);
         return {
             result: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Delete(':id/hard_delete')
     async deleteUser(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.usersService.setUser = req.user;
         const result = await this.usersService.hardDeleteUser(id);
         return {
             result: result

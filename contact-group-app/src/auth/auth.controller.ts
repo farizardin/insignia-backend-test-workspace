@@ -15,6 +15,8 @@ export class AuthController {
         const result = await this.authService.login(loginDto);
         const userId = result.id;
         const data = { apiToken: result.apiToken, lastActivityAt: new Date() };
+
+        this.usersService.setUser = result.user;
         const user = await this.usersService.updateUser(userId, data);
         return {
             apiToken: user.apiToken,

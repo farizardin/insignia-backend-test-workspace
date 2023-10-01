@@ -31,26 +31,46 @@ model User {
   workspace      Workspace? @relation(fields: [workspaceId], references: [id])
   workspaceId    String?
   apiToken       String?
+  contacts       Contact[]
+  groups         Group[]
 }
 
 model Contact {
-  id          String     @id @default(uuid())
-  name        String
-  number      String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  deletedAt   DateTime?
-  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
-  workspaceId String?
+  id           String        @id @default(uuid())
+  name         String
+  phoneNumber  String
+  email        String?
+  address      String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  workspace    Workspace?    @relation(fields: [workspaceId], references: [id])
+  workspaceId  String?
+  user         User?         @relation(fields: [userId], references: [id])
+  userId       String?
+  contactLists ContactList[]
 }
 
 model Group {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  user         User?         @relation(fields: [userId], references: [id])
+  userId       String?
+  contactLists ContactList[]
+}
+
+model ContactList {
+  id        String   @id @default(uuid())
+  contactId String
+  groupId   String
+  contact   Contact? @relation(fields: [contactId], references: [id])
+  group     Group?   @relation(fields: [groupId], references: [id])
+
+  @@unique([contactId, groupId])
 }
 
 model Workspace {
