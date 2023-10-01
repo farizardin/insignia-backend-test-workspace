@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable, NotFoundException, UnprocessableEntityException, InternalServerErrorException } from '@nestjs/common';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -12,16 +12,27 @@ export class UsersRepository {
     }
 
     async create(params: any): Promise<any> {
-        const data = {
-            name: params.name,
-            email: params.email,
-            password: params.password,
-        }
-        const newUser = await this.user.create({
-            data: data
-        });
+        try {
+            const data = {
+                name: params.name,
+                email: params.email,
+                password: params.password,
+            }
+            const newUser = await this.user.create({
+                data: data
+            });
 
-        return newUser;
+            return newUser;
+        } catch (error: any) {
+            const target = error.meta?.target as string[];
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2002' && target.includes('email')) {
+                    throw new UnprocessableEntityException('User with the same email already exists.');
+                }
+            }
+
+            throw new InternalServerErrorException;
+        }
     }
 
     async update(id: string, params: any): Promise<any> {
@@ -57,8 +68,8 @@ export class UsersRepository {
 
     async hardDelete(id: string): Promise<any> {
         const user = await this.findById(id)
-        if(!user){
-            throw new NotFoundException('User not found');
+        if (!user) {
+            throw new NotFoundException('User with ID ${id} not found');
         }
         const updatedUser = await this.user.delete({
             where: { id: id },

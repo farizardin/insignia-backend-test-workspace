@@ -54,7 +54,7 @@ export class ContactsRepository {
     async hardDelete(id: string): Promise<any> {
         const contact = await this.findById(id)
         if(!contact){
-            throw new NotFoundException('Contact not found');
+            throw new NotFoundException('Contact with ID ${id} not found');
         }
         const updatedContact = await this.contact.delete({
             where: { id: id },
