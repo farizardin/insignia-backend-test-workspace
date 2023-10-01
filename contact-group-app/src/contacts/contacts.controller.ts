@@ -16,9 +16,11 @@ export class ContactsController {
         query['deletedAt'] = {
             equals: null,
         }
+        query['userId'] = req.user.id;
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.listContact(query);
         return {
-            result: result
+            data: result
         };
     }
 
@@ -31,18 +33,22 @@ export class ContactsController {
         query['deletedAt'] = {
             not: null,
         }
+        query['userId'] = req.user.id;
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.listContact(query);
         return {
-            result: result
+            data: result
         };
     }
 
-    
+    @UseGuards(JwtStrategy)
     @Post()
     async createContact(
         @Request() req: any,
         @Body() createContactDto: CreateContactDto,
     ): Promise<any> {
+        this.contactsService.setUser = req.user;
+        createContactDto.userId = req.user.id;
         const result = await this.contactsService.createContact(createContactDto);
         return {
             msg: 'Contact successfully registered',
@@ -56,45 +62,56 @@ export class ContactsController {
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Put(':id/update')
     async updateContact(
         @Request() req: any,
         @Param('id') id: string,
         @Body() updateContactDto: UpdateContactDto,
     ): Promise<any> {
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.updateContact(id, updateContactDto);
         return {
-            result: result
+            data: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Delete(':id/archive')
     async archiveContact(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.softDeleteContact(id);
         return {
-            result: result
+            data: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Put(':id/restore')
     async restoreContact(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.restoreContact(id);
         return {
-            result: result
+            data: result
         };
     }
 
+    @UseGuards(JwtStrategy)
     @Delete(':id/hard_delete')
     async deleteContact(
+        @Request() req: any,
         @Param('id') id: string
     ): Promise<any> {
+        this.contactsService.setUser = req.user;
         const result = await this.contactsService.hardDeleteContact(id);
         return {
-            result: result
+            data: result
         };
     }
 }

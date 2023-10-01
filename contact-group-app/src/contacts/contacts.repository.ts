@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class ContactsRepository {
@@ -11,11 +12,7 @@ export class ContactsRepository {
     }
 
     async create(params: any): Promise<any> {
-        const data = {
-            name: params.name,
-            email: params.email,
-            password: params.password,
-        }
+        const data = instanceToPlain(params);
         const newContact = await this.contact.create({
             data: data
         });
@@ -67,9 +64,8 @@ export class ContactsRepository {
     }
 
     async restore(id: string): Promise<any> {
-        const contactId = parseInt(id);
         const updatedContact = await this.contact.update({
-            where: { id: contactId },
+            where: { id: id },
             data: { deletedAt: null }
         });
 

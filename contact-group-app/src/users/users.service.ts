@@ -73,7 +73,7 @@ export class UsersService {
     }
 
     private validateUpdateUser(id: any) {
-        const msg = 'You dont have update user access!';
+        const msg = 'You cannot update this user!';
         if(!this.user) throw new UnauthorizedException();
         if(this.user.role == 'ADMIN' || this.user.id == id) return;
 

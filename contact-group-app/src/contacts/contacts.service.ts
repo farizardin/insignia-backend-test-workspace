@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateContactDto } from './contact-dto/create-contact.dto';
 import { ContactsRepository } from './contacts.repository';
 import { instanceToPlain } from 'class-transformer';
@@ -6,6 +6,7 @@ import { instanceToPlain } from 'class-transformer';
 @Injectable()
 export class ContactsService {
     private contactsRepository: ContactsRepository;
+    private user: any;
     constructor() { this.contactsRepository = new ContactsRepository }
 
     async listContact(query: Record<string, any>) {
@@ -15,37 +16,60 @@ export class ContactsService {
 
     async getContact(email: string) {
         const data = { email: email }
-        const user = this.contactsRepository.findByEmail(data);
-        return user;
+        const contact = this.contactsRepository.findByEmail(data);
+        this.validateContact(contact)
+
+        return contact;
     }
 
     async createContact(params: CreateContactDto) {
-        const newContactDto = new CreateContactDto;
-        newContactDto.name = params.name;
-        newContactDto.phoneNumber = params.phoneNumber;
-        const user = this.contactsRepository.create(newContactDto);
+        const contact = this.contactsRepository.create(params);
 
-        return user;
+        return contact;
     }
 
     async updateContact(id: string, params: any) {
-        const userDtoObject = instanceToPlain(params);
-        const user = this.contactsRepository.update(id, userDtoObject);
-        return user;
+        const contactDtoObject = instanceToPlain(params);
+        const contact = await this.contactsRepository.findById(id);
+        this.validateContact(contact)
+        const updatedContact = this.contactsRepository.update(id, contactDtoObject);
+
+        return updatedContact;
     }
 
     async softDeleteContact(id: string) {
-        const user = this.contactsRepository.softDelete(id);
-        return user;
+        const contact = await this.contactsRepository.findById(id);
+        this.validateContact(contact)
+        const deletedContact = this.contactsRepository.softDelete(id);
+
+        return deletedContact;
     }
 
     async hardDeleteContact(id: string) {
-        const user = this.contactsRepository.hardDelete(id);
-        return user;
+        const contact = await this.contactsRepository.findById(id);
+        this.validateContact(contact)
+        const deletedContact = this.contactsRepository.hardDelete(id);
+
+        return deletedContact;
     }
 
     async restoreContact(id: string) {
-        const user = this.contactsRepository.restore(id);
-        return user;
+        const contact = await this.contactsRepository.findById(id);
+        this.validateContact(contact)
+        const restoredContact = this.contactsRepository.restore(id);
+
+        return restoredContact;
+    }
+
+    set setUser(user: any) {
+        this.user = user;
+    }
+
+    private validateContact(contact: any) {
+        const msg = 'You cannot update this contact!';
+        if(!this.user) throw new UnauthorizedException();
+        if(this.user.role == 'ADMIN' || this.user.id == contact.userId) return;
+
+        throw new UnauthorizedException(msg)
     }
 }

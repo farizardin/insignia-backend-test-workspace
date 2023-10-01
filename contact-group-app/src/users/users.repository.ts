@@ -68,9 +68,8 @@ export class UsersRepository {
     }
 
     async restore(id: string): Promise<any> {
-        const userId = parseInt(id);
         const updatedUser = await this.user.update({
-            where: { id: userId },
+            where: { id: id },
             data: { deletedAt: null }
         });
 
