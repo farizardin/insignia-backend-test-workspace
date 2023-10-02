@@ -38,7 +38,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.listGroup(query);
         return {
-            data: result
+            data: result.map((r: any)=>({
+                    id: r.id,
+                    name: r.name,
+                    email: r.email,
+                    description: r.description,
+            }))
         };
     }
 
@@ -57,8 +62,7 @@ export class GroupsController {
                 id: result.id,
                 name: result.name,
                 email: result.email,
-                role: result.email,
-                createdAt: result.createdAt,
+                description: result.description,
             }
         };
     }
@@ -86,6 +90,20 @@ export class GroupsController {
     ): Promise<any> {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.addContact(id, addGroupContactDto);
+        return {
+            data: result
+        };
+    }
+
+    @UseGuards(JwtStrategy)
+    @Put(':id/remove_contact')
+    async removeContact(
+        @Request() req: any,
+        @Param('id') id: string,
+        @Body() addGroupContactDto: AddGroupContactDto,
+    ): Promise<any> {
+        this.groupsService.setUser = req.user;
+        const result = await this.groupsService.removeContact(id, addGroupContactDto);
         return {
             data: result
         };

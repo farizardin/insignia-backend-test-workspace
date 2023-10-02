@@ -60,6 +60,19 @@ export class GroupsRepository {
         return createdContactList;
     }
 
+    async removeMembers(id: string, contactIds: string[]) {
+        const contactList = await this.contactList.deleteMany({
+            where: {
+              OR: contactIds.map((contactId) => ({
+                groupId: id,
+                contactId: contactId,
+              })),
+            },
+          });
+
+        return contactList;
+    }
+
     async findById(id: string): Promise<any> {
         return this.group.findUnique({ where: { id: id } });
     }

@@ -20,7 +20,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.listContact(query);
         return {
-            data: result
+            data: result.map((r: any)=>({
+                    id: r.id,
+                    name: r.name,
+                    email: r.email,
+                    phoneNumber: r.phoneNumber,
+            }))
         };
     }
 
@@ -37,7 +42,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.listContact(query);
         return {
-            data: result
+            data: result.map((r: any)=>({
+                id: r.id,
+                name: r.name,
+                email: r.email,
+                phoneNumber: r.phoneNumber,
+            }))
         };
     }
 
@@ -51,13 +61,12 @@ export class ContactsController {
         createContactDto.userId = req.user.id;
         const result = await this.contactsService.createContact(createContactDto);
         return {
-            msg: 'Contact successfully registered',
+            message: 'Contact successfully registered',
             data: {
                 id: result.id,
                 name: result.name,
                 email: result.email,
-                role: result.email,
-                createdAt: result.createdAt,
+                phoneNumber: result.phoneNumber
             }
         };
     }
@@ -72,7 +81,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.updateContact(id, updateContactDto);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                phoneNumber: result.phoneNumber
+            }
         };
     }
 
@@ -85,7 +99,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.softDeleteContact(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                phoneNumber: result.phoneNumber
+            }
         };
     }
 
@@ -98,7 +117,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.restoreContact(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                phoneNumber: result.phoneNumber
+            }
         };
     }
 
@@ -111,7 +135,12 @@ export class ContactsController {
         this.contactsService.setUser = req.user;
         const result = await this.contactsService.hardDeleteContact(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                phoneNumber: result.phoneNumber
+            }
         };
     }
 }

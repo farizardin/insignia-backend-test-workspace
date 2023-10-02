@@ -19,8 +19,14 @@ export class UsersController {
         }
         this.usersService.setUser = req.user;
         const result = await this.usersService.listUser(query);
+
         return {
-            result: result
+            data: result.map((r: any)=>({
+                    id: r.id,
+                    name: r.name,
+                    email: r.email,
+                    role: r.role,
+            }))
         };
     }
 
@@ -36,7 +42,12 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.listUser(query);
         return {
-            result: result
+            data: result.map((r: any)=>({
+                id: r.id,
+                name: r.name,
+                email: r.email,
+                role: r.role,
+        }))
         };
     }
 
@@ -46,13 +57,11 @@ export class UsersController {
     ): Promise<any> {
         const result = await this.usersService.createUser(createUserDto);
         return {
-            msg: 'User successfully registered',
+            message: 'User successfully registered',
             data: {
                 id: result.id,
                 name: result.name,
                 email: result.email,
-                role: result.email,
-                createdAt: result.createdAt,
             }
         };
     }
@@ -67,7 +76,11 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.updateUser(id, updateUserDto);
         return {
-            result: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+            }
         };
     }
 
@@ -80,7 +93,11 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.softDeleteUser(id);
         return {
-            result: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+            }
         };
     }
 
@@ -93,7 +110,11 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.restoreUser(id);
         return {
-            result: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+            }
         };
     }
 
@@ -106,7 +127,7 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.hardDeleteUser(id);
         return {
-            result: result
+            data: result
         };
     }
 }

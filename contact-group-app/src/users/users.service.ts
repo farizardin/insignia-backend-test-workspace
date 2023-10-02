@@ -15,7 +15,6 @@ export class UsersService {
     }
 
     async listUser(query: Record<string, any>) {
-        this.validateAsAdmin();
         const users = this.usersRepository.findMany(query);
         return users;
     }
@@ -73,7 +72,7 @@ export class UsersService {
     }
 
     private validateUpdateUser(id: any) {
-        const msg = 'You cannot update this user!';
+        const msg = 'Action not permitted!';
         if(!this.user) throw new UnauthorizedException();
         if(this.user.role == 'ADMIN' || this.user.id == id) return;
 

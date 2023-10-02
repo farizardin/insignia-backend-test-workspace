@@ -11,15 +11,8 @@ export class GroupsService {
 
     async listGroup(query: Record<string, any>) {
         const groups = this.groupsRepository.findMany(query);
+        console.log(groups);
         return groups;
-    }
-
-    async getGroup(email: string) {
-        const data = { email: email }
-        const group = this.groupsRepository.findByEmail(data);
-        this.validateGroup(group)
-
-        return group;
     }
 
     async createGroup(params: CreateGroupDto) {
@@ -38,7 +31,16 @@ export class GroupsService {
     }
 
     async addContact(id: string, params: any) {
+        const group = await this.groupsRepository.findById(id);
+        this.validateGroup(group)
         const contactList = await this.groupsRepository.insertMembers(id, params.contactIds);
+        return contactList;
+    }
+
+    async removeContact(id: string, params: any) {
+        const group = await this.groupsRepository.findById(id);
+        this.validateGroup(group)
+        const contactList = await this.groupsRepository.removeMembers(id, params.contactIds);
         return contactList;
     }
 

@@ -66,7 +66,7 @@ export class ContactsService {
     }
 
     private validateContact(contact: any) {
-        const msg = 'You cannot update this contact!';
+        const msg = 'Action is not permitted!';
         if(!this.user) throw new UnauthorizedException();
         if(this.user.role == 'ADMIN' || this.user.id == contact.userId) return;
 
