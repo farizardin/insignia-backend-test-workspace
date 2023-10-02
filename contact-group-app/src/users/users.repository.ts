@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnprocessableEntityException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaClient, Prisma } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersRepository {

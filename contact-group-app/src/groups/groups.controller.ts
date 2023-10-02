@@ -21,7 +21,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.listGroup(query);
         return {
-            data: result
+            data: result.map((r: any)=>({
+                    id: r.id,
+                    name: r.name,
+                    email: r.email,
+                    description: r.description,
+            }))
         };
     }
 
@@ -57,7 +62,7 @@ export class GroupsController {
         createGroupDto.userId = req.user.id;
         const result = await this.groupsService.createGroup(createGroupDto);
         return {
-            msg: 'Group successfully registered',
+            message: 'Group successfully created',
             data: {
                 id: result.id,
                 name: result.name,
@@ -77,7 +82,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.updateGroup(id, updateGroupDto);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                description: result.description,
+            }
         };
     }
 
@@ -91,7 +101,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.addContact(id, addGroupContactDto);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                description: result.description,
+            }
         };
     }
 
@@ -118,7 +133,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.softDeleteGroup(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                description: result.description,
+            }
         };
     }
 
@@ -131,7 +151,12 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.restoreGroup(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+                description: result.description,
+            }
         };
     }
 
