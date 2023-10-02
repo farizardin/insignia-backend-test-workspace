@@ -76,40 +76,51 @@ DEL /api/users/:d/hard_delete
 ![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/4ba82eaf-d041-4ee3-a9ac-d27e7ca343c0)
 
 ## Contact Module
-
+Users can only modify their contacts (Unauthorized for modify the other user contact)
 create contact
 ```
 POST /api/contact/signup
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/88ca2f52-cde7-434e-bc4c-b18285e40fe3)
+
 
 get contact list
 ```
 GET /api/contact
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/7cd8b903-4572-49f7-89e3-d2971b4aa406)
 
 
 update contact
 ```
 PUT /api/contact/:d/update
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/9591f5da-aae0-4686-b32f-91283e4ab719)
 
 
 contact archiving
 ```
 DEL /api/contact/:d/archive
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/97f2cbf6-f6de-4d4b-b49b-95eda69626da)
+
 
 get archived contact list
 ```
 GET /api/contact/archived
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/2527fff0-0069-45e8-bd5f-e9457452086a)
+
 
 restore contact
 ```
 PUT /api/contact/:id/restore
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/3b30eefb-4b88-45c8-9762-c24eaf6e956c)
+
 
 contact hard delete
 ```
 DEL /api/contact/:d/hard_delete
 ```
+![image](https://github.com/farizardin/insignia-backend-test-workspace/assets/20537870/edebd927-026f-40e1-aad1-62f89bd5052d)
