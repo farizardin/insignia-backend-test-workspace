@@ -21,11 +21,11 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.listGroup(query);
         return {
-            data: result.map((r: any)=>({
-                    id: r.id,
-                    name: r.name,
-                    email: r.email,
-                    description: r.description,
+            data: result.map((r: any) => ({
+                id: r.id,
+                name: r.name,
+                email: r.email,
+                description: r.description,
             }))
         };
     }
@@ -43,11 +43,11 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.listGroup(query);
         return {
-            data: result.map((r: any)=>({
-                    id: r.id,
-                    name: r.name,
-                    email: r.email,
-                    description: r.description,
+            data: result.map((r: any) => ({
+                id: r.id,
+                name: r.name,
+                email: r.email,
+                description: r.description,
             }))
         };
     }
@@ -101,12 +101,11 @@ export class GroupsController {
         this.groupsService.setUser = req.user;
         const result = await this.groupsService.addContact(id, addGroupContactDto);
         return {
-            data: {
-                id: result.id,
-                name: result.name,
-                email: result.email,
-                description: result.description,
-            }
+            data: result.map((r: any) => ({
+                id: r.id,
+                contactId: r.contactId,
+                groupId: r.groupId,
+            }))
         };
     }
 

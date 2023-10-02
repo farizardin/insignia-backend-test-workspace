@@ -127,7 +127,11 @@ export class UsersController {
         this.usersService.setUser = req.user;
         const result = await this.usersService.hardDeleteUser(id);
         return {
-            data: result
+            data: {
+                id: result.id,
+                name: result.name,
+                email: result.email,
+            }
         };
     }
 }
